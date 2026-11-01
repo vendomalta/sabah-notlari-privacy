@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="NoteWake iPhone uygulamasının bütün özelliklerini anlatan kullanım kılavuzu.">
+<link rel="icon" href="favicon.png">
+<title>NoteWake – Kullanım Kılavuzu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Düzen: solda sabit içindekiler (masaüstü), sağda tek sütun kılavuz; telefonda üstte kaydırılan bölüm çipleri.
+     Renkler ve yazı tipi uygulamanın kendisinden: sıcak gri zemin, beyaz düz kartlar, gün doğumu turuncusu. */
+  :root {
+    --bg: #F6F4F0;
+    --card: #FFFFFF;
+    --card-alt: #EFECE6;
+    --border: #E6E1D9;
+    --fg: #1A1814;
+    --muted: #6B655C;
+    --faint: #A39D93;
+    --accent: #E2702A;
+    --accent-soft: #FCE8D9;
+    --accent-ink: #9A4210;
+    --warn: #B4471E;
+    --font: "Plus Jakarta Sans", ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --sky-1: #10142B; --sky-2: #2E2346; --sky-3: #7A3A4A; --sky-4: #D9733E; --sky-5: #F4B98A; --sky-6: #FBEBDD;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F0E0D; --card: #1A1917; --card-alt: #25231F; --border: #2F2C28;
+      --fg: #F3F0EB; --muted: #A7A097; --faint: #6C665E;
+      --accent: #F28A45; --accent-soft: #3A2516; --accent-ink: #F7B07E; --warn: #F08A5D;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F0E0D; --card: #1A1917; --card-alt: #25231F; --border: #2F2C28;
+    --fg: #F3F0EB; --muted: #A7A097; --faint: #6C665E;
+    --accent: #F28A45; --accent-soft: #3A2516; --accent-ink: #F7B07E; --warn: #F08A5D;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--font);
+    font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+  .wrap {
+    max-width: 1080px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 72px;
+  }
+
+  /* Üst kısım */
+  header.top { display: grid; gap: 18px; padding-bottom: 28px; }
+  .sky { display: flex; height: 8px; border-radius: 4px; overflow: hidden; max-width: 260px; }
+  .sky span { flex: 1; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent-ink); }
+  h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
+  .lead { font-size: 18px; color: var(--muted); max-width: 60ch; margin: 0; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .fact { font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: var(--card-alt); color: var(--muted); }
+
+  .search { position: relative; max-width: 520px; }
+  .search input {
+    width: 100%; font: inherit; font-size: 16px; color: var(--fg);
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 13px 16px 13px 44px;
+  }
+  .search input::placeholder { color: var(--faint); }
+  .search svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--faint); }
+  .no-result { color: var(--muted); padding: 24px 0; }
+
+  /* Gövde düzeni */
+  .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start; }
+  nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); display: grid; gap: 2px; }
+  nav.toc .toc-title { font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+  nav.toc a {
+    text-decoration: none; color: var(--muted); font-size: 14.5px; font-weight: 500;
+    padding: 7px 12px; border-radius: 10px;
+  }
+  nav.toc a:hover { background: var(--card-alt); color: var(--fg); }
+  nav.toc a.on { background: var(--accent-soft); color: var(--accent-ink); font-weight: 700; }
+
+  main { display: grid; gap: 56px; min-width: 0; }
+  section { display: grid; gap: 16px; scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 72px); min-width: 0; }
+  section > h2 { font-size: 26px; line-height: 1.2; font-weight: 800; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+  .intro { color: var(--muted); margin: 0; max-width: 62ch; }
+  h3 { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 10px 0 0; }
+
+  /* Özellik listesi: beyaz düz kart içinde satırlar */
+  .list { background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+  .item { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 16px 18px; border-top: 1px solid var(--border); }
+  .item:first-child { border-top: 0; }
+  .ico {
+    width: 34px; height: 34px; border-radius: 10px; background: var(--accent-soft); color: var(--accent-ink);
+    display: grid; place-items: center;
+  }
+  .ico svg { width: 18px; height: 18px; }
+  .item b { display: block; font-weight: 700; font-size: 16px; line-height: 1.35; }
+  .item p { margin: 3px 0 0; color: var(--muted); font-size: 15px; }
+  .tag { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: var(--card-alt); color: var(--muted); margin-left: 6px; vertical-align: 2px; }
+  .tag.new { background: var(--accent-soft); color: var(--accent-ink); }
+
+  /* Akıllı yazma örnekleri */
+  .examples { background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th { text-align: left; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); padding: 14px 18px 10px; }
+  td { padding: 11px 18px; border-top: 1px solid var(--border); vertical-align: top; }
+  td:last-child { color: var(--muted); }
+  .typed {
+    display: inline-block; font-weight: 600; color: var(--fg);
+    background: var(--card-alt); border-radius: 8px; padding: 3px 9px; white-space: nowrap;
+  }
+
+  /* Bir sabah: gerçek sıra olduğu için numaralı */
+  .steps { display: grid; gap: 0; counter-reset: s; background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+  .step { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 16px 18px; border-top: 1px solid var(--border); counter-increment: s; }
+  .step:first-child { border-top: 0; }
+  .step::before {
+    content: counter(s); width: 34px; height: 34px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 800; display: grid; place-items: center; font-variant-numeric: tabular-nums;
+  }
+  .step b { display: block; font-weight: 700; }
+  .step p { margin: 3px 0 0; color: var(--muted); font-size: 15px; }
+
+  /* Uyarı / not kutusu */
+  .note { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; padding: 14px 16px; border-radius: 14px; background: var(--accent-soft); font-size: 15px; }
+  .note svg { width: 20px; height: 20px; color: var(--accent-ink); margin-top: 2px; }
+  .note p { margin: 0; }
+
+  /* Sık sorulanlar */
+  details { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 0 18px; }
+  details + details { margin-top: 8px; }
+  summary { cursor: pointer; font-weight: 700; padding: 15px 0; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--accent-ink); font-weight: 800; font-size: 20px; line-height: 1; }
+  details[open] summary::after { content: "−"; }
+  details p { margin: 0 0 16px; color: var(--muted); }
+
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--faint); font-size: 14px; }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    nav.toc {
+      position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+      display: flex; overflow-x: auto; gap: 6px; padding: 10px 0; background: var(--bg);
+      scrollbar-width: none;
+    }
+    nav.toc::-webkit-scrollbar { display: none; }
+    nav.toc .toc-title { display: none; }
+    nav.toc a { white-space: nowrap; background: var(--card); border: 1px solid var(--border); font-size: 14px; }
+    body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+    .item, .step { padding: 14px; }
+    td, th { padding-left: 14px; padding-right: 14px; }
+  }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+<style>
+  .back { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--muted); }
+  .back:hover { color: var(--accent-ink); }
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+    <symbol id="i-alarm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 1 0 6 18.9"/><path d="M6 19h11.5"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2a2 2 0 0 0-1.5 3.3A1.6 1.6 0 0 1 12 22Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="12" cy="7" r="1"/><circle cx="16.5" cy="11" r="1"/></symbol>
+    <symbol id="i-swipe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M15 7l5 5-5 5M9 7l-5 5 5 5"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9Z"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M12 8S10.5 3 8 3a2.5 2.5 0 0 0 0 5M12 8s1.5-5 4-5a2.5 2.5 0 0 1 0 5"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <a class="back" href="./">← NoteWake Destek</a>
+    <div class="sky" aria-hidden="true">
+      <span style="background:var(--sky-1)"></span><span style="background:var(--sky-2)"></span><span style="background:var(--sky-3)"></span>
+      <span style="background:var(--sky-4)"></span><span style="background:var(--sky-5)"></span><span style="background:var(--sky-6)"></span>
+    </div>
+    <div class="eyebrow">Kullanım kılavuzu</div>
+    <h1>NoteWake Kılavuzu</h1>
+    <p class="lead">Hatırlaman gerekeni o güne yaz. Sabah uyandığında NoteWake o günün notlarını ekrana getirir ve istersen sesli okur. Bu sayfada uygulamanın bütün özellikleri kısa ve sade şekilde anlatılıyor.</p>
+    <div class="facts">
+      <span class="fact">iPhone için</span>
+      <span class="fact">Türkçe ve İngilizce</span>
+      <span class="fact">Hesap gerekmez</span>
+      <span class="fact">Notlar telefonunda kalır</span>
+    </div>
+    <label class="search" for="q">
+      <svg aria-hidden="true"><use href="#i-search"/></svg>
+      <input id="q" type="search" placeholder="Özellik ara: alarm, widget, Siri, yedek…" autocomplete="off">
+    </label>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Bölümler">
+      <div class="toc-title">Bölümler</div>
+      <a href="#baslarken">Başlarken</a>
+      <a href="#yazma">Not yazma</a>
+      <a href="#anasayfa">Ana sayfa</a>
+      <a href="#alarm">Alarm</a>
+      <a href="#sabah">Sabah ve anons</a>
+      <a href="#notlar">Notlar sekmesi</a>
+      <a href="#hatirlatma">Gün boyu hatırlatmalar</a>
+      <a href="#telefon">Telefonla bağlantı</a>
+      <a href="#gorunum">Görünüm</a>
+      <a href="#yedek">Yedek ve gizlilik</a>
+      <a href="#sss">Sık sorulanlar</a>
+    </nav>
+
+    <main id="guide">
+      <!-- BAŞLARKEN -->
+      <section id="baslarken">
+        <h2>Başlarken</h2>
+        <p class="intro">İlk açılışta kısa bir tanıtım ve iki soruluk kurulum var. Sonra uygulama dört sekmeden oluşur: <b>Ana sayfa</b>, <b>Alarm</b>, <b>Notlar</b> ve <b>Ayarlar</b>.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Tanıtım</b><p>Beş sayfalık kısa tanıtım uygulamanın ne yaptığını gösterir. Sonradan Ayarlar → Tanıtımı tekrar izle ile yeniden açılır.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-alarm"/></svg></span><div><b>Sabah nasıl gelsin?</b><p>Üç seçenek var: <b>Bildirim</b> (günün notları tek bildirimle gelir), <b>Alarm</b> (alarm gibi çalar, kapatınca notlar açılır) veya <b>Sadece uygulamada</b> (bildirim yok).</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-bell"/></svg></span><div><b>İzinler</b><p>Bildirim ve alarm izinleri kurulumda istenir. İzin vermezsen sabah bildirimi ve alarm gelmez; Alarm sekmesinde bunun için bir uyarı çıkar.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Dil</b><p>Türkçe veya İngilizce. Kurulumda ya da Ayarlar → Dil bölümünden değiştirilebilir. Anons da seçilen dilde okunur.</p></div></div>
+        </div>
+      </section>
+
+      <!-- NOT YAZMA -->
+      <section id="yazma">
+        <h2>Not yazma</h2>
+        <p class="intro">Ana sayfanın altındaki kutuya normal bir cümle yaz. NoteWake günü, saati, tekrarı ve listeyi cümleden kendisi anlar. Tanınan kelimeler renkli görünür ve notun metninden çıkarılır.</p>
+        <div class="examples" data-search="akıllı yazma örnek tarih saat tekrar liste">
+          <table>
+            <thead><tr><th>Yazdığın</th><th>NoteWake’in anladığı</th></tr></thead>
+            <tbody>
+              <tr><td><span class="typed">yarın 9’da doktor</span></td><td>Yarın, saat 09:00</td></tr>
+              <tr><td><span class="typed">cuma 14:00 toplantı</span></td><td>Bu cuma, saat 14:00</td></tr>
+              <tr><td><span class="typed">her pazartesi çöp</span></td><td>Her pazartesi tekrarlar</td></tr>
+              <tr><td><span class="typed">Market: süt, ekmek, yumurta</span></td><td>İşaretlenebilir 3 maddelik liste</td></tr>
+              <tr><td><span class="typed">2 saat sonra ilaç</span></td><td>Bugün, 2 saat sonrası</td></tr>
+              <tr><td><span class="typed">2 haftada bir fatura</span></td><td>İki haftada bir tekrarlar</td></tr>
+              <tr><td><span class="typed">ayın ilk pazartesi toplantı</span></td><td>Her ayın ilk pazartesi</td></tr>
+              <tr><td><span class="typed">10 gün boyunca vitamin</span></td><td>10 gün her gün, sonra biter</td></tr>
+              <tr><td><span class="typed">toplantı 10’da, 30 dk önce hatırlat</span></td><td>Saat 10:00 ve 09:30’da ek hatırlatma</td></tr>
+              <tr><td><span class="typed">ilaç 9’da ve 21’de</span></td><td>Aynı gün iki hatırlatma</td></tr>
+              <tr><td><span class="typed">14-15 arası dişçi</span></td><td>Başlangıç ve bitiş saati</td></tr>
+              <tr><td><span class="typed">yağmur yağarsa şemsiye</span></td><td>Sadece yağmurlu günlerde görünür</td></tr>
+              <tr><td><span class="typed">eve varınca çamaşır</span></td><td>Eve vardığında hatırlatır</td></tr>
+              <tr><td><span class="typed">işe gitmeden önce anahtar</span></td><td>Evden çıkış saatinde hatırlatır</td></tr>
+              <tr><td><span class="typed">önemli vergi son gün</span></td><td>⭐ Önemli olarak işaretlenir</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-mic"/></svg></span><div><b>Sesle yaz</b><p>Mikrofon düğmesine bas ve notunu söyle. Bitirince durdur düğmesine bas; söylediğin cümle akıllı yazmadan geçer.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pen"/></svg></span><div><b>Detaylı not ekle</b><p>Gün, saat, tekrar, kategori, emoji ve maddeleri tek tek seçmek istersen detaylı not ekranını aç.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Kategoriler</b><p>İş, Ev, Alışveriş, Sağlık, Ödeme ve Kişisel. Çoğu zaman yazdığın kelimeye göre kendiliğinden seçilir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pen"/></svg></span><div><b>Kısayollu notlar</b><p>Bir listeye kısayol harfi ver (ör. “u” = fikirler). Ana ekrana <span class="typed">u yeni fikir</span> yazınca yazı o listeye eklenir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>Aynı not uyarısı</b><p>Aynı gün için aynı notu tekrar yazarsan “Bu not zaten var” der. İstersen yine de eklersin.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Akıllı yazma saatleri</b><p>“sabah”, “öğle”, “akşam” ve “gece” yazınca hangi saatin kullanılacağını Ayarlar → Notlar ve hatırlatmalar bölümünden sen belirlersin.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Akıllı yazmayı kapat</b><p>Yazdığının olduğu gibi kaydedilmesini istersen akıllı yazma bir not için kapatılabilir.</p></div></div>
+        </div>
+      </section>
+
+      <!-- ANA SAYFA -->
+      <section id="anasayfa">
+        <h2>Ana sayfa</h2>
+        <p class="intro">Seçili günün notları burada. En üstte bugünün tarihi ve ilerleme halkası var.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-swipe"/></svg></span><div><b>Kaydır, bitir</b><p>Notu sağa kaydır: tamamlandı. Sola kaydır: yarına ertelendi. Yanlışlıkla silersen “Geri al” çıkar.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Uzun bas menüsü</b><p>Düzenle, Başka güne taşı, Sadece bu gün atla (tekrarlayan notlarda), Paylaş ve Sil.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-cal"/></svg></span><div><b>Takvim şeridi ve Hafta görünümü</b><p>Üstteki takvimden başka bir güne geç; “Bugüne dön” ile geri gel. Takvim düğmesi haftanın 7 gününü alt alta gösterir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Sıralama</b><p>Otomatik sırada önce önemli notlar, sonra saatliler gelir. “Sırala” ile tutamaçtan tutup elle de dizebilirsin.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>Sabah rutini</b><p>Her sabah yapacakların (su iç, ilacını al, yatağı topla…) ana sayfada işaretlenebilir bir kart olarak durur.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-star"/></svg></span><div><b>Akıllı öneri</b><p>Aynı notu her pazartesi elle yazıyorsan, “Her hafta tekrarlayayım mı?” diye sorar. Hayır dersen bir daha sormaz.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-gift"/></svg></span><div><b>Doğum günleri</b><p>Rehberindeki kişilerin doğum günü o gün ana sayfada görünür.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Günü bitirince kutlama</b><p>Son notu da tamamlayınca kısa bir konfeti ve ses. Görünüm ayarından kapatılabilir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Sesli dinle</b><p>Günün anonsunu istediğin an dinlemek için ses düğmesine bas.</p></div></div>
+        </div>
+      </section>
+
+      <!-- ALARM -->
+      <section id="alarm">
+        <h2>Alarm</h2>
+        <p class="intro">Alarm sekmesinde uyanma saati ve diğer alarmlar kurulur. Sağ üstteki dişli; ses, erteleme ve uyku ayarlarını açar.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-alarm"/></svg></span><div><b>Uyanma alarmı</b><p>Saati ve hangi günler çalacağını seç. Saatin altında alarmın ne kadar sonra çalacağı yazar, ör. “7 sa 20 dk sonra çalacak”.<span class="tag new">Yeni</span></p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Telefonun gerçek alarmı</b><p>Alarm iPhone’un Saat uygulamasındaki alarm gibi kurulur: sessiz modda, kilit ekranında ve odak modunda da çalar. iOS 26 veya daha yenisi gerekir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>“Uyandım”</b><p>Alarmı kapatır ve NoteWake’i açar: Günaydın ekranı gelir, anons okunur, o günün kalan tekrarları iptal olur.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>“Ertele”</b><p>Uygulamayı açmadan alarmı susturur. Erteleme süresi (5, 10 veya 15 dk) dolunca “Hâlâ uyumuyor musun?” diye tekrar çalar.<span class="tag new">Yeni</span></p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-alarm"/></svg></span><div><b>Açmazsam tekrar çal</b><p>Alarm en fazla kaç kez tekrar çalsın: Bir kez, +1, +2 veya +3. Son tekrarda Ertele düğmesi çıkmaz.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Alarm sesi</b><p>Hazır seslerden birini seç ya da kendi ses dosyanı ekle. Seslere dokunarak dinleyebilirsin.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Ses seviyesi: Telefonun sesi veya MAX</b><p>Normalde alarm yavaşça yükselerek çalar. MAX seçilirse çalarken telefonun sesi en yükseğe çıkar, kapatınca eski haline döner.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Gün doğumu ekranı</b><p>Uygulama içinde çalan alarmda ekran 60 saniyede gece lacivertinden sabah turuncusuna aydınlanır, ses yavaşça yükselir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-alarm"/></svg></span><div><b>Diğer alarmlar</b><p>Uyanma saatinden başka alarmlar: hafta sonu 09:00, öğlen ilaç gibi. Her birine ad, saat ve gün verilir; sadece “Kapat” düğmesi vardır.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-star"/></svg></span><div><b>Önemli notlar alarm gibi çalsın</b><p>⭐ önemli ve saatli notlar, sessiz modda bile telefonun gerçek alarmıyla çalar.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>Yatma vakti hatırlatması</b><p>Kaç saat uyumak istediğini seç. Ertesi sabahın alarmına göre yatma saatinden 30 dakika önce hatırlatır.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>Alarmı dene, Bildirimi dene</b><p>Ayarların doğru çalıştığını görmek için alarm ekranını hemen aç ya da 10 saniye sonra örnek bildirim gönder.</p></div></div>
+        </div>
+        <div class="note" data-search="sessiz mod ios 26 uyarı">
+          <svg><use href="#i-info"/></svg>
+          <p>iOS 26’dan eski iPhone’larda alarm bildirim olarak gelir ve sessiz modda duyulmayabilir. Böyle bir durumda Alarm sekmesinin en üstünde kırmızı bir uyarı çıkar.</p>
+        </div>
+      </section>
+
+      <!-- SABAH -->
+      <section id="sabah">
+        <h2>Sabah ve anons</h2>
+        <p class="intro">NoteWake’in asıl işi sabah. Alarmdan sonra şu sırayla ilerler:</p>
+        <div class="steps" data-search="sabah akış alarm uyandım günaydın anons dynamic island">
+          <div class="step"><div><b>Alarm çalar</b><p>Uyanma saatinde gerçek alarm çalar. “Ertele” dersen birkaç dakika sonra tekrar çalar.</p></div></div>
+          <div class="step"><div><b>“Uyandım” dersin</b><p>NoteWake açılır ve o gün uyandığın kaydedilir.</p></div></div>
+          <div class="step"><div><b>Günaydın ekranı gelir</b><p>Hava durumu, kendine yazdığın mesaj, işe varış süresi, sabah rutini, günün notları, takvim, yaklaşan önemli günler, haber başlıkları ve günün sözü.</p></div></div>
+          <div class="step"><div><b>Anons okunur</b><p>Bütün bunlar sesli okunur. Telefon sessizde olsa da duyulur.</p></div></div>
+          <div class="step"><div><b>Gün boyu kilit ekranında</b><p>Sıradaki not ve kalan not sayısı kilit ekranında ve Dynamic Island’da görünür.</p></div></div>
+        </div>
+        <h3>Anonsu ayarla</h3>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Bölümler ve sıra</b><p>Ne söylensin: selamlama, hava, notlar, takvim, mesaj, haberler, söz… Her bölümü aç, kapat ve sırasını değiştir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Sana nasıl seslenelim?</b><p>Adını yaz; anons “Günaydın, Ayşe!” diye başlar.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Hafta sonu kısa anons</b><p>Cumartesi ve pazar sadece selam, hava, mesaj, notlar ve kapanış okunur.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Hava durumu ve tavsiye</b><p>Şehrini seç ya da bulunduğun yeri kullan. “Şemsiyeni al”, “Kalın giyin” gibi kısa tavsiyeler de söylenir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pin"/></svg></span><div><b>İşe varış süresi</b><p>Ev ve iş adresini gir; arabayla tahmini süre söylenir. Anlık trafik bilgisi içermez.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Haber başlıkları</b><p>Kendi seçtiğin haber sitesinin RSS bağlantısını ekle; ilk birkaç başlık okunur.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pen"/></svg></span><div><b>Yarın sabaha mesaj</b><p>Akşamdan kendine bir not bırak. Sabah Günaydın ekranında “Kendine mesajın” olarak görünür ve okunur.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Ses seçimi</b><p>NoteWake telefondaki en doğal sesi kendisi seçer. İstersen başka bir ses ve konuşma hızı seçebilirsin.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Arkada hafif müzik</b><p>Anons okunurken yumuşak bir müzik çalar, bitince yavaşça kısılır.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Gerçekçi ses</b><p>Google’ın insan gibi konuşan yapay zekâ sesi. Kendi Google API anahtarınla çalışır, ayda 1 milyon karakter ücretsizdir. İnternet yoksa telefonun sesine döner.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Not yokken de günaydın de</b><p>Kapalıysa sabah bildirimi sadece notun olan günlerde gelir.</p></div></div>
+        </div>
+      </section>
+
+      <!-- NOTLAR -->
+      <section id="notlar">
+        <h2>Notlar sekmesi</h2>
+        <p class="intro">Bütün notların tek yerde: <b>Tekrarlayan</b>, <b>Yaklaşan</b> ve <b>Geçmiş</b> bölümleri.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-search"/></svg></span><div><b>Arama ve kategori süzgeci</b><p>Notları yazıya göre ara ya da sadece bir kategoriyi göster.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Listeler</b><p>Market listesi gibi maddeli notları düzenle, madde ekle, işaretle.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Paylaş</b><p>Bir notu ya da listeyi kendine mesaj veya e-posta olarak gönder, ya da iPhone’un Notlar uygulamasına kaydet.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Hazır listeler</b><p>Sık kullandığın listeleri (tatil çantası, haftalık market…) bir kez hazırla, tek dokunuşla not olarak ekle. Adı, emojisi ve maddeleri değiştirilebilir.</p></div></div>
+        </div>
+      </section>
+
+      <!-- HATIRLATMALAR -->
+      <section id="hatirlatma">
+        <h2>Gün boyu hatırlatmalar</h2>
+        <p class="intro">Ayarlar → Notlar ve hatırlatmalar bölümünden açılıp kapanır.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-bell"/></svg></span><div><b>Saatli not bildirimleri</b><p>Saat verdiğin notlar o saatte ayrıca hatırlatılır.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-bell"/></svg></span><div><b>Önceden hatırlatma</b><p>“30 dk önce” ya da “1 gün önce” gibi ek bir uyarı.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>Akşam hatırlatması</b><p>Seçtiğin saatte “Yarın için not yazdın mı?” diye sorar ve yarın kaç notun olduğunu söyler.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Haftanın özeti</b><p>Pazar akşamı kaç notunu bitirdiğini ve en çok neyi ertelediğini söyler.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>Gece sessizliği</b><p>Belirlediğin saatler arasına düşen hatırlatmalar sabaha kaydırılır.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pin"/></svg></span><div><b>Yerlerim</b><p>Ev, Market gibi yerleri kaydet. O yere bağlı notlar oraya vardığında bildirim olarak gelir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-swipe"/></svg></span><div><b>Yapılmayanları bugüne taşı</b><p>Geçmiş günlerde tamamlanmayan tek seferlik notlar bugünün listesinde görünür.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>Tamamlanmış eski notları temizle</b><p>Biten eski notları tek dokunuşla siler, liste sade kalır.</p></div></div>
+        </div>
+      </section>
+
+      <!-- TELEFON -->
+      <section id="telefon">
+        <h2>Telefonla bağlantı</h2>
+        <p class="intro">NoteWake iPhone’un widget, takvim, kilit ekranı ve Siri özellikleriyle birlikte çalışır. Hepsi Ayarlar → Telefonla bağlantı bölümünde.</p>
+        <h3>Widget’lar</h3>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Bugünün notları</b><p>Ana ekranda ve kilit ekranında. Nota dokununca uygulamayı açmadan tamamlanır (iOS 17 ve üstü). Basılı tutup “Düzenle” ile tek bir kategori seçilebilir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Bir bakışta</b><p>Kalan not sayısı, seri, sıradaki not, yarınki uyanış saati, hızlı not ekleme ve anonsu dinleme düğmesi.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Bilgi</b><p>Günün sözü, hava ve notlar, işe varış süresi ve günün saatine göre kendini değiştiren akıllı widget.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Listeler</b><p>Önemli notlar, yarının listesi, kategoriler, yaklaşan günler, sabah rutini ve haftalık görünüm.</p></div></div>
+        </div>
+        <h3>Diğer bağlantılar</h3>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Dynamic Island ve kilit ekranı</b><p>Uyandıktan sonra sıradaki not kamera adasında ve kilit ekranında görünür.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-cal"/></svg></span><div><b>Takvim etkinliklerini göster</b><p>iCloud veya Google takvimindeki etkinlikler sabah notlarına ve anonsa eklenir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-cal"/></svg></span><div><b>Saatli notları takvime ekle</b><p>Notlar “NoteWake” adında ayrı bir takvime yazılır. Takvimde saatini değiştirirsen not da değişir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-gift"/></svg></span><div><b>Doğum günleri</b><p>Rehberindeki kişilerin doğum günü sabah bildiriminde, ana ekranda ve anonsta söylenir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-mic"/></svg></span><div><b>Siri ile not ekle</b><p>“Hey Siri, sabah notu ekle” de. Siri ne not edeceğini sorar, cümle akıllı yazmadan geçip doğru güne eklenir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-mic"/></svg></span><div><b>Siri ile alarm</b><p>“NoteWake alarm kur” (Siri saati sorar: “6 buçuk”, “7:15”, “yediye çeyrek var”), “NoteWake alarmı kapat” ve “NoteWake alarmı aç”.<span class="tag new">Yeni</span></p></div></div>
+        </div>
+        <div class="note" data-search="siri kestirme kurulum">
+          <svg><use href="#i-info"/></svg>
+          <p>Siri komutları iPhone’un Kestirmeler uygulamasında bir kez kurulur. Ayarlar → Telefonla bağlantı → Siri sayfası adımları gösterir ve bağlantıları Kopyala düğmesiyle verir.</p>
+        </div>
+      </section>
+
+      <!-- GÖRÜNÜM -->
+      <section id="gorunum">
+        <h2>Görünüm</h2>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-palette"/></svg></span><div><b>Renk teması</b><p>Beş tema: Gün doğumu, Okyanus, Orman, Lavanta ve Grafit.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>Açık / koyu</b><p>Açık, koyu ya da telefonun ayarına göre otomatik.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pen"/></svg></span><div><b>Yazı boyutu</b><p>Küçük, Normal, Büyük veya Çok büyük.</p></div></div>
+        </div>
+      </section>
+
+      <!-- YEDEK -->
+      <section id="yedek">
+        <h2>Yedek ve gizlilik</h2>
+        <p class="intro">Hesap açman gerekmez. Notların sadece senin telefonunda durur.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-cloud"/></svg></span><div><b>Otomatik iCloud yedeği</b><p>Günde bir kez kendi iCloud’una yedek alınır. Yeni telefonda “iCloud’dan geri yükle” ile notların geri gelir.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-cloud"/></svg></span><div><b>Elle yedek</b><p>Yedeği metin olarak paylaş ya da kaydet. Geri yüklemek için “Yedek metnini yapıştır”.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Bütün verileri sil</b><p>Bütün notları ve ayarları telefondan kalıcı olarak siler.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Yeni sürüm uyarısı</b><p>Uygulama açılırken internet varsa App Store’da yeni sürüm olup olmadığına bakar. Varsa “Güncelle” ya da “Sonra” diye sorar.<span class="tag new">Yeni</span></p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Destek ve gizlilik politikası</b><p>Ayarlar → Hakkında bölümünden açılır.</p></div></div>
+        </div>
+      </section>
+
+      <!-- SSS -->
+      <section id="sss">
+        <h2>Sık sorulanlar</h2>
+        <div>
+          <details><summary>Telefon sessizdeyken alarm çalar mı?</summary><p>Evet. iOS 26 veya daha yeni bir iPhone’da alarm izni verdiysen alarm sessiz modda, kilit ekranında ve odak modunda da çalar. Daha eski iOS’ta alarm bildirim olarak gelir; geceleri telefonu sessize almamak gerekir.</p></details>
+          <details><summary>Alarmdan sonra anons okunmuyor, ne yapmalıyım?</summary><p>Ayarlar → Sesli okuma ve anons bölümünde “Notları sesli oku” ayarının açık olduğuna bak. Anons, alarmdaki “Uyandım” düğmesine basınca başlar; “Ertele” anons başlatmaz.</p></details>
+          <details><summary>İnternet gerekir mi?</summary><p>Hayır. Notlar, alarm, hatırlatmalar ve anons internetsiz çalışır. Hava durumu, haber başlıkları, işe varış süresi ve gerçekçi ses için internet gerekir; internet yoksa bunlar atlanır.</p></details>
+          <details><summary>Notlarım nerede saklanıyor?</summary><p>Sadece senin telefonunda. Açarsan bir kopyası kendi iCloud hesabına yedeklenir. NoteWake’in bir sunucusu ya da hesap sistemi yoktur.</p></details>
+          <details><summary>Bir notu sadece bir günlüğüne nasıl atlarım?</summary><p>Tekrarlayan nota uzun bas ve “Sadece bu gün atla”yı seç. Not diğer günlerde görünmeye devam eder.</p></details>
+          <details><summary>Siri komutlarını neden ayrıca kurmam gerekiyor?</summary><p>NoteWake, Siri’ye iPhone’un Kestirmeler uygulaması üzerinden bağlanır. Her komutu bir kez kurman yeterli; Siri sayfası adımları tek tek gösterir.</p></details>
+        </div>
+      </section>
+
+      <p class="no-result" id="empty" hidden>Bu aramayla eşleşen özellik bulunamadı. Başka bir kelime dene, ör. “alarm” ya da “widget”.</p>
+    </main>
+  </div>
+
+  <footer>NoteWake · iPhone için sabah notları ve alarm · Kılavuz sürümü 1.0</footer>
+</div>
+
+<script>
+  (function () {
+    var q = document.getElementById('q');
+    var sections = Array.prototype.slice.call(document.querySelectorAll('main section'));
+    var empty = document.getElementById('empty');
+    var norm = function (s) { return (s || '').toLocaleLowerCase('tr').normalize('NFD').replace(/[̀-ͯ]/g, ''); };
+
+    function filter() {
+      var term = norm(q.value.trim());
+      var any = false;
+      sections.forEach(function (sec) {
+        var title = norm(sec.querySelector('h2').textContent);
+        var units = sec.querySelectorAll('.item, tr, .step, details, .note, .examples, .intro');
+        var hits = 0;
+        var titleHit = term && title.indexOf(term) !== -1;
+        units.forEach(function (u) {
+          if (u.tagName === 'TR' && u.parentElement.tagName === 'THEAD') return;
+          var text = norm(u.textContent + ' ' + (u.getAttribute('data-search') || ''));
+          var show = !term || titleHit || text.indexOf(term) !== -1;
+          if (u.classList.contains('examples') || u.classList.contains('intro')) return;
+          u.hidden = !show;
+          if (show) hits++;
+        });
+        // tablo: eşleşen satır yoksa tabloyu gizle
+        var ex = sec.querySelector('.examples');
+        if (ex) {
+          var rows = ex.querySelectorAll('tbody tr:not([hidden])').length;
+          ex.hidden = term && !titleHit && rows === 0;
+        }
+        sec.querySelectorAll('.list, .steps').forEach(function (box) {
+          box.hidden = !box.querySelector(':scope > :not([hidden])');
+        });
+        sec.querySelectorAll('h3').forEach(function (h) {
+          var next = h.nextElementSibling;
+          h.hidden = !!(next && next.hidden);
+        });
+        var visible = !term || titleHit || hits > 0;
+        sec.hidden = !visible;
+        if (visible) any = true;
+      });
+      empty.hidden = any;
+    }
+    q.addEventListener('input', filter);
+
+    // İçindekiler: görünen bölümü işaretle
+    var links = {};
+    document.querySelectorAll('nav.toc a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          Object.keys(links).forEach(function (k) { links[k].classList.toggle('on', k === e.target.id); });
+          var a = links[e.target.id];
+          if (a && a.parentElement.scrollWidth > a.parentElement.clientWidth) {
+            a.parentElement.scrollTo({ left: a.offsetLeft - 16, behavior: 'smooth' });
+          }
+        });
+      }, { rootMargin: '-30% 0px -60% 0px' });
+      sections.forEach(function (s) { io.observe(s); });
+    }
+  })();
+</script>
+</body>
+</html>
