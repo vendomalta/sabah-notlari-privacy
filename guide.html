@@ -167,6 +167,7 @@
   .back:hover { color: var(--accent-ink); }
   :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
   body { margin: 0; }
+  .toplinks { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 </style>
 </head>
 <body>
@@ -196,7 +197,7 @@
 
 <div class="wrap">
   <header class="top">
-    <a class="back" href="./">← NoteWake Destek</a>
+    <div class="toplinks"><a class="back" href="./">← NoteWake Destek</a><a class="back" href="guide-en.html" lang="en">English</a></div>
     <div class="sky" aria-hidden="true">
       <span style="background:var(--sky-1)"></span><span style="background:var(--sky-2)"></span><span style="background:var(--sky-3)"></span>
       <span style="background:var(--sky-4)"></span><span style="background:var(--sky-5)"></span><span style="background:var(--sky-6)"></span>

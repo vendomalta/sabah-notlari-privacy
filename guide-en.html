@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A simple guide to every feature of the NoteWake iPhone app.">
+<link rel="icon" href="favicon.png">
+<title>NoteWake – User Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Düzen: solda sabit içindekiler (masaüstü), sağda tek sütun kılavuz; telefonda üstte kaydırılan bölüm çipleri.
+     Renkler ve yazı tipi uygulamanın kendisinden: sıcak gri zemin, beyaz düz kartlar, gün doğumu turuncusu. */
+  :root {
+    --bg: #F6F4F0;
+    --card: #FFFFFF;
+    --card-alt: #EFECE6;
+    --border: #E6E1D9;
+    --fg: #1A1814;
+    --muted: #6B655C;
+    --faint: #A39D93;
+    --accent: #E2702A;
+    --accent-soft: #FCE8D9;
+    --accent-ink: #9A4210;
+    --warn: #B4471E;
+    --font: "Plus Jakarta Sans", ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --sky-1: #10142B; --sky-2: #2E2346; --sky-3: #7A3A4A; --sky-4: #D9733E; --sky-5: #F4B98A; --sky-6: #FBEBDD;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F0E0D; --card: #1A1917; --card-alt: #25231F; --border: #2F2C28;
+      --fg: #F3F0EB; --muted: #A7A097; --faint: #6C665E;
+      --accent: #F28A45; --accent-soft: #3A2516; --accent-ink: #F7B07E; --warn: #F08A5D;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F0E0D; --card: #1A1917; --card-alt: #25231F; --border: #2F2C28;
+    --fg: #F3F0EB; --muted: #A7A097; --faint: #6C665E;
+    --accent: #F28A45; --accent-soft: #3A2516; --accent-ink: #F7B07E; --warn: #F08A5D;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--font);
+    font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+  .wrap {
+    max-width: 1080px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 72px;
+  }
+
+  /* Üst kısım */
+  header.top { display: grid; gap: 18px; padding-bottom: 28px; }
+  .sky { display: flex; height: 8px; border-radius: 4px; overflow: hidden; max-width: 260px; }
+  .sky span { flex: 1; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent-ink); }
+  h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
+  .lead { font-size: 18px; color: var(--muted); max-width: 60ch; margin: 0; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .fact { font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; background: var(--card-alt); color: var(--muted); }
+
+  .search { position: relative; max-width: 520px; }
+  .search input {
+    width: 100%; font: inherit; font-size: 16px; color: var(--fg);
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 13px 16px 13px 44px;
+  }
+  .search input::placeholder { color: var(--faint); }
+  .search svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--faint); }
+  .no-result { color: var(--muted); padding: 24px 0; }
+
+  /* Gövde düzeni */
+  .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start; }
+  nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); display: grid; gap: 2px; }
+  nav.toc .toc-title { font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+  nav.toc a {
+    text-decoration: none; color: var(--muted); font-size: 14.5px; font-weight: 500;
+    padding: 7px 12px; border-radius: 10px;
+  }
+  nav.toc a:hover { background: var(--card-alt); color: var(--fg); }
+  nav.toc a.on { background: var(--accent-soft); color: var(--accent-ink); font-weight: 700; }
+
+  main { display: grid; gap: 56px; min-width: 0; }
+  section { display: grid; gap: 16px; scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 72px); min-width: 0; }
+  section > h2 { font-size: 26px; line-height: 1.2; font-weight: 800; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+  .intro { color: var(--muted); margin: 0; max-width: 62ch; }
+  h3 { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 10px 0 0; }
+
+  /* Özellik listesi: beyaz düz kart içinde satırlar */
+  .list { background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+  .item { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 16px 18px; border-top: 1px solid var(--border); }
+  .item:first-child { border-top: 0; }
+  .ico {
+    width: 34px; height: 34px; border-radius: 10px; background: var(--accent-soft); color: var(--accent-ink);
+    display: grid; place-items: center;
+  }
+  .ico svg { width: 18px; height: 18px; }
+  .item b { display: block; font-weight: 700; font-size: 16px; line-height: 1.35; }
+  .item p { margin: 3px 0 0; color: var(--muted); font-size: 15px; }
+  .tag { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: var(--card-alt); color: var(--muted); margin-left: 6px; vertical-align: 2px; }
+  .tag.new { background: var(--accent-soft); color: var(--accent-ink); }
+
+  /* Akıllı yazma örnekleri */
+  .examples { background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th { text-align: left; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); padding: 14px 18px 10px; }
+  td { padding: 11px 18px; border-top: 1px solid var(--border); vertical-align: top; }
+  td:last-child { color: var(--muted); }
+  .typed {
+    display: inline-block; font-weight: 600; color: var(--fg);
+    background: var(--card-alt); border-radius: 8px; padding: 3px 9px; white-space: nowrap;
+  }
+
+  /* Bir sabah: gerçek sıra olduğu için numaralı */
+  .steps { display: grid; gap: 0; counter-reset: s; background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+  .step { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 16px 18px; border-top: 1px solid var(--border); counter-increment: s; }
+  .step:first-child { border-top: 0; }
+  .step::before {
+    content: counter(s); width: 34px; height: 34px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 800; display: grid; place-items: center; font-variant-numeric: tabular-nums;
+  }
+  .step b { display: block; font-weight: 700; }
+  .step p { margin: 3px 0 0; color: var(--muted); font-size: 15px; }
+
+  /* Uyarı / not kutusu */
+  .note { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; padding: 14px 16px; border-radius: 14px; background: var(--accent-soft); font-size: 15px; }
+  .note svg { width: 20px; height: 20px; color: var(--accent-ink); margin-top: 2px; }
+  .note p { margin: 0; }
+
+  /* Sık sorulanlar */
+  details { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 0 18px; }
+  details + details { margin-top: 8px; }
+  summary { cursor: pointer; font-weight: 700; padding: 15px 0; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--accent-ink); font-weight: 800; font-size: 20px; line-height: 1; }
+  details[open] summary::after { content: "−"; }
+  details p { margin: 0 0 16px; color: var(--muted); }
+
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--faint); font-size: 14px; }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    nav.toc {
+      position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+      display: flex; overflow-x: auto; gap: 6px; padding: 10px 0; background: var(--bg);
+      scrollbar-width: none;
+    }
+    nav.toc::-webkit-scrollbar { display: none; }
+    nav.toc .toc-title { display: none; }
+    nav.toc a { white-space: nowrap; background: var(--card); border: 1px solid var(--border); font-size: 14px; }
+    body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+    .item, .step { padding: 14px; }
+    td, th { padding-left: 14px; padding-right: 14px; }
+  }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+<style>
+  .back { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--muted); }
+  .back:hover { color: var(--accent-ink); }
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; }
+  .toplinks { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+    <symbol id="i-alarm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 1 0 6 18.9"/><path d="M6 19h11.5"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22a10 10 0 1 1 10-10c0 2.8-2.2 4-4 4h-2a2 2 0 0 0-1.5 3.3A1.6 1.6 0 0 1 12 22Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="12" cy="7" r="1"/><circle cx="16.5" cy="11" r="1"/></symbol>
+    <symbol id="i-swipe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M15 7l5 5-5 5M9 7l-5 5 5 5"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9Z"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M12 8S10.5 3 8 3a2.5 2.5 0 0 0 0 5M12 8s1.5-5 4-5a2.5 2.5 0 0 1 0 5"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <div class="toplinks"><a class="back" href="./">← NoteWake Support</a><a class="back" href="guide.html" lang="tr">Türkçe</a></div>
+    <div class="sky" aria-hidden="true">
+      <span style="background:var(--sky-1)"></span><span style="background:var(--sky-2)"></span><span style="background:var(--sky-3)"></span>
+      <span style="background:var(--sky-4)"></span><span style="background:var(--sky-5)"></span><span style="background:var(--sky-6)"></span>
+    </div>
+    <div class="eyebrow">User guide</div>
+    <h1>NoteWake Guide</h1>
+    <p class="lead">Write down what you need to remember on the day you need it. When you wake up, NoteWake brings up that day’s notes and can read them aloud. This page explains every feature of the app, simply and briefly.</p>
+    <div class="facts">
+      <span class="fact">For iPhone</span>
+      <span class="fact">English and Turkish</span>
+      <span class="fact">No account needed</span>
+      <span class="fact">Notes stay on your phone</span>
+    </div>
+    <label class="search" for="q">
+      <svg aria-hidden="true"><use href="#i-search"/></svg>
+      <input id="q" type="search" placeholder="Search features: alarm, widget, Siri, backup…" autocomplete="off">
+    </label>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Sections">
+      <div class="toc-title">Sections</div>
+      <a href="#getting-started">Getting started</a>
+      <a href="#writing">Writing notes</a>
+      <a href="#home">Home</a>
+      <a href="#alarm">Alarm</a>
+      <a href="#morning">Morning briefing</a>
+      <a href="#notes">Notes tab</a>
+      <a href="#reminders">Reminders</a>
+      <a href="#phone">Phone integration</a>
+      <a href="#appearance">Appearance</a>
+      <a href="#backup">Backup and privacy</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
+    <main id="guide">
+      <section id="getting-started">
+        <h2>Getting started</h2>
+        <p class="intro">The first launch shows a short intro and a two-question setup. After that the app has four tabs: <b>Home</b>, <b>Alarm</b>, <b>Notes</b> and <b>Settings</b>.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Intro</b><p>A short five-page intro shows what the app does. Open it again any time from Settings → Watch the intro again.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-alarm"/></svg></span><div><b>How should mornings work?</b><p>Three choices: <b>Notification</b> (the day’s notes arrive as one notification), <b>Alarm</b> (rings like an alarm, then shows your notes) or <b>In the app only</b> (no notifications).</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-bell"/></svg></span><div><b>Permissions</b><p>Notification and alarm permissions are requested during setup. Without them, no morning notification or alarm arrives, and the Alarm tab shows a warning.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Language</b><p>English or Turkish. Choose during setup or later in Settings → Language. The briefing is read in the chosen language.</p></div></div>
+        </div>
+      </section>
+
+      <section id="writing">
+        <h2>Writing notes</h2>
+        <p class="intro">Type a normal sentence in the box at the bottom of Home. NoteWake works out the day, time, repeat and list from the sentence. Recognized words are highlighted and removed from the note text.</p>
+        <div class="examples" data-search="smart typing example date time repeat list">
+          <table>
+            <thead><tr><th>You type</th><th>NoteWake understands</th></tr></thead>
+            <tbody>
+              <tr><td><span class="typed">tomorrow 9am dentist</span></td><td>Tomorrow, 9:00 AM</td></tr>
+              <tr><td><span class="typed">friday 2pm meeting</span></td><td>This Friday, 2:00 PM</td></tr>
+              <tr><td><span class="typed">every monday trash</span></td><td>Repeats every Monday</td></tr>
+              <tr><td><span class="typed">Groceries: milk, bread, eggs</span></td><td>A checklist with 3 items</td></tr>
+              <tr><td><span class="typed">in 2 hours medicine</span></td><td>Today, 2 hours from now</td></tr>
+              <tr><td><span class="typed">every 2 weeks bills</span></td><td>Repeats every two weeks</td></tr>
+              <tr><td><span class="typed">first monday of the month meeting</span></td><td>The first Monday of every month</td></tr>
+              <tr><td><span class="typed">vitamins for 10 days</span></td><td>Every day for 10 days, then stops</td></tr>
+              <tr><td><span class="typed">meeting at 10, remind 30 min before</span></td><td>10:00 AM plus a reminder at 9:30</td></tr>
+              <tr><td><span class="typed">pills at 9 and 21</span></td><td>Two reminders on the same day</td></tr>
+              <tr><td><span class="typed">dentist 2-3pm</span></td><td>Start and end time</td></tr>
+              <tr><td><span class="typed">umbrella if it rains</span></td><td>Only shows on rainy days</td></tr>
+              <tr><td><span class="typed">laundry when I get home</span></td><td>Reminds you when you arrive home</td></tr>
+              <tr><td><span class="typed">keys before work</span></td><td>Reminds you shortly before you leave home</td></tr>
+              <tr><td><span class="typed">important tax deadline</span></td><td>Marked as ⭐ important</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-mic"/></svg></span><div><b>Dictate</b><p>Tap the microphone and say your note. Tap stop when you finish; the sentence goes through smart typing like a typed one.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pen"/></svg></span><div><b>Add detailed note</b><p>Prefer to pick the day, time, repeat, category, emoji and items one by one? Open the detailed note screen.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Categories</b><p>Work, Home, Shopping, Health, Payment and Personal. Usually picked automatically from the words you type.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pen"/></svg></span><div><b>Shortcut notes</b><p>Give a list a shortcut letter (for example “i” = ideas). Typing <span class="typed">i new idea</span> on Home adds the text to that list.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>Duplicate warning</b><p>If you write the same note again for the same day, the app says “You already have this note”. You can still add it.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Smart typing times</b><p>Choose which times “morning”, “noon”, “evening” and “night” mean in Settings → Notes &amp; reminders.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Turn off smart typing</b><p>Want a note saved exactly as written? Turn smart typing off for that note.</p></div></div>
+        </div>
+      </section>
+
+      <section id="home">
+        <h2>Home</h2>
+        <p class="intro">The notes for the selected day live here. The date and a progress ring sit at the top.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-swipe"/></svg></span><div><b>Swipe to finish</b><p>Swipe a note right: done. Swipe left: moved to tomorrow. Deleted something by mistake? Tap “Undo”.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Long-press menu</b><p>Edit, Move to another day, Skip just this day (for repeating notes), Share and Delete.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-cal"/></svg></span><div><b>Calendar strip and Week view</b><p>Jump to another day from the calendar at the top; “Back to today” brings you back. The calendar button shows all 7 days of the week in one list.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Ordering</b><p>Automatic order puts important notes first, then timed ones. Use “Reorder” to drag notes by the handle.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>Morning routine</b><p>Things you do every morning (drink water, take medicine, make the bed…) sit on Home as a card you can tick off.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-star"/></svg></span><div><b>Smart suggestion</b><p>If you keep typing the same note every Monday, the app offers to repeat it weekly. Say no and it won’t ask again.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-gift"/></svg></span><div><b>Birthdays</b><p>Birthdays from your contacts appear on Home on the day.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Celebrate finishing the day</b><p>Finish your last note for a little confetti and a short sound. You can turn it off in Appearance.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Listen</b><p>Tap the speaker button to hear today’s briefing any time.</p></div></div>
+        </div>
+      </section>
+
+      <section id="alarm">
+        <h2>Alarm</h2>
+        <p class="intro">Set your wake-up time and other alarms in the Alarm tab. The gear at the top right opens sound, snooze and sleep settings.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-alarm"/></svg></span><div><b>Wake-up alarm</b><p>Pick the time and the days. Under the time you see how long until it rings, for example “Rings in 7 h 20 min”.<span class="tag new">New</span></p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>The phone’s real alarm</b><p>The alarm is set like the ones in the iPhone Clock app: it rings on silent, on the Lock Screen and in Focus modes. Requires iOS 26 or later.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>“I’m awake”</b><p>Stops the alarm and opens NoteWake: the morning screen appears, the briefing is read aloud and the rest of that day’s repeats are cancelled.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>“Snooze”</b><p>Silences the alarm without opening the app. When the snooze length (5, 10 or 15 min) is up, it rings again with “Still sleeping?”.<span class="tag new">New</span></p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-alarm"/></svg></span><div><b>Ring again if I don’t open it</b><p>How many times the alarm may ring again: Once, +1, +2 or +3. The last repeat has no Snooze button.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Alarm sound</b><p>Choose one of the built-in sounds or add your own sound file. Tap a sound to hear it.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Volume: Phone volume or MAX</b><p>Normally the alarm gets louder gradually. With MAX, the phone’s volume goes all the way up while it rings and returns to normal afterwards.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Sunrise screen</b><p>When the alarm rings inside the app, the screen brightens from night blue to morning orange over 60 seconds while the sound slowly rises.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-alarm"/></svg></span><div><b>Other alarms</b><p>Alarms besides your wake-up time, like 9:00 on weekends or a midday pill. Each has a name, time and days, and only a “Close” button.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-star"/></svg></span><div><b>Ring important notes like an alarm</b><p>⭐ important notes with a time ring with the phone’s real alarm, even on silent.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>Bedtime reminder</b><p>Choose how many hours you want to sleep. The app reminds you 30 minutes before bedtime, based on the next morning’s alarm.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>Try alarm, Try notification</b><p>Check your settings: open the alarm screen right away, or get a sample notification in 10 seconds.</p></div></div>
+        </div>
+        <div class="note" data-search="silent ios 26 warning">
+          <svg><use href="#i-info"/></svg>
+          <p>On iPhones with iOS older than 26, the alarm arrives as a notification and may not be heard on silent. In that case a red warning appears at the top of the Alarm tab.</p>
+        </div>
+      </section>
+
+      <section id="morning">
+        <h2>Morning briefing</h2>
+        <p class="intro">Mornings are what NoteWake is for. After the alarm, it goes in this order:</p>
+        <div class="steps" data-search="morning flow alarm awake briefing dynamic island">
+          <div class="step"><div><b>The alarm rings</b><p>The real alarm rings at your wake-up time. Tap “Snooze” and it rings again a few minutes later.</p></div></div>
+          <div class="step"><div><b>You tap “I’m awake”</b><p>NoteWake opens and remembers that you’re up today.</p></div></div>
+          <div class="step"><div><b>The morning screen appears</b><p>Weather, your message to yourself, commute time, morning routine, today’s notes, calendar, upcoming important days, news headlines and the quote of the day.</p></div></div>
+          <div class="step"><div><b>The briefing is read aloud</b><p>All of it is read out loud, and you can hear it even when the phone is on silent.</p></div></div>
+          <div class="step"><div><b>On the Lock Screen all day</b><p>Your next note and how many are left show on the Lock Screen and in the Dynamic Island.</p></div></div>
+        </div>
+        <h3>Set up the briefing</h3>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Sections and order</b><p>What to say: greeting, weather, notes, calendar, message, news, quote… Turn each section on or off and change the order.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>How should we greet you?</b><p>Enter your name and the briefing starts with “Good morning, Alex!”.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Short briefing on weekends</b><p>On Saturday and Sunday only the greeting, weather, message, notes and closing are read.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Weather and tips</b><p>Pick your city or use your current location. Short tips like “Take an umbrella” or “Dress warmly” are included.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pin"/></svg></span><div><b>Commute time</b><p>Enter home and work addresses to hear the estimated drive time. It does not include live traffic.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>News headlines</b><p>Add the RSS link of a news site you choose; the first few headlines are read.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pen"/></svg></span><div><b>Message for tomorrow morning</b><p>Leave yourself a note the night before. In the morning it appears as “Your message to yourself” and is read aloud.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Voice</b><p>NoteWake picks the most natural voice on your phone. You can choose another voice and speaking speed.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Soft background music</b><p>Gentle music plays during the briefing and fades out when it ends.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sound"/></svg></span><div><b>Realistic voice</b><p>Google’s human-like AI voice. Works with your own Google API key; 1 million characters a month are free. Without internet it falls back to the phone’s voice.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Say good morning even with no notes</b><p>When off, the morning notification only arrives on days that have notes.</p></div></div>
+        </div>
+      </section>
+
+      <section id="notes">
+        <h2>Notes tab</h2>
+        <p class="intro">All your notes in one place, in <b>Repeating</b>, <b>Upcoming</b> and <b>Past</b> sections.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-search"/></svg></span><div><b>Search and category filter</b><p>Search notes by text or show just one category.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Lists</b><p>Edit notes with items, like a shopping list: add items and tick them off.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Share</b><p>Send a note or list to yourself as a message or email, or save it to the iPhone Notes app.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Templates</b><p>Prepare lists you use often (holiday packing, weekly groceries…) once, then add them as a note with one tap. Name, emoji and items can be changed.</p></div></div>
+        </div>
+      </section>
+
+      <section id="reminders">
+        <h2>Reminders</h2>
+        <p class="intro">Turn these on or off in Settings → Notes &amp; reminders.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-bell"/></svg></span><div><b>Timed note notifications</b><p>Notes with a time get their own reminder at that time.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-bell"/></svg></span><div><b>Early reminder</b><p>An extra alert like “30 min before” or “1 day before”.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>Evening reminder</b><p>At the time you choose, it asks whether you’ve written tomorrow’s notes and tells you how many you have.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-list"/></svg></span><div><b>Your week</b><p>On Sunday evening it tells you how many notes you finished and what you postponed most.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>Quiet hours</b><p>Reminders that fall within the hours you set are moved to the morning.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pin"/></svg></span><div><b>My places</b><p>Save places like Home or Supermarket. Notes linked to a place arrive as a notification when you get there.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-swipe"/></svg></span><div><b>Carry unfinished notes to today</b><p>One-time notes left unfinished on earlier days show up in today’s list.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-check"/></svg></span><div><b>Clean up old finished notes</b><p>Deletes old finished notes with one tap to keep your list tidy.</p></div></div>
+        </div>
+      </section>
+
+      <section id="phone">
+        <h2>Phone integration</h2>
+        <p class="intro">NoteWake works with iPhone widgets, Calendar, the Lock Screen and Siri. Find them all in Settings → Phone integration.</p>
+        <h3>Widgets</h3>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Today’s notes</b><p>On the Home Screen and Lock Screen. Tap a note to finish it without opening the app (iOS 17 and later). Long-press and choose “Edit Widget” to show one category.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>At a glance</b><p>Notes left, streak, next note, tomorrow’s wake-up time, quick add and a button to play the briefing.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Info</b><p>Quote of the day, weather and notes, commute time, and a smart widget that changes with the time of day.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-phone"/></svg></span><div><b>Lists</b><p>Important notes, tomorrow’s list, categories, upcoming days, morning routine and a week view.</p></div></div>
+        </div>
+        <h3>More connections</h3>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-sun"/></svg></span><div><b>Dynamic Island and Lock Screen</b><p>After you wake up, your next note shows in the Dynamic Island and on the Lock Screen.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-cal"/></svg></span><div><b>Show calendar events</b><p>Events from your iCloud or Google calendar are added to your morning notes and briefing.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-cal"/></svg></span><div><b>Add timed notes to Calendar</b><p>Notes are written to a separate calendar called “NoteWake”. Change the time in Calendar and the note changes too.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-gift"/></svg></span><div><b>Birthdays</b><p>Birthdays from your contacts are mentioned in the morning notification, on Home and in the briefing.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-mic"/></svg></span><div><b>Add notes with Siri</b><p>Say “Hey Siri, add a morning note”. Siri asks what to note, and the sentence is added to the right day through smart typing.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-mic"/></svg></span><div><b>Alarm with Siri</b><p>“Set NoteWake alarm” (Siri asks for the time: “six thirty”, “7:15”, “quarter to seven”), “NoteWake alarm off” and “NoteWake alarm on”.<span class="tag new">New</span></p></div></div>
+        </div>
+        <div class="note" data-search="siri shortcut setup">
+          <svg><use href="#i-info"/></svg>
+          <p>Siri commands are set up once in the iPhone Shortcuts app. The Siri page in Settings → Phone integration shows the steps and gives you the links with a Copy button.</p>
+        </div>
+      </section>
+
+      <section id="appearance">
+        <h2>Appearance</h2>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-palette"/></svg></span><div><b>Color theme</b><p>Five themes: Sunrise, Ocean, Forest, Lavender and Graphite.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-moon"/></svg></span><div><b>Light / dark</b><p>Light, dark, or automatic to match your phone.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-pen"/></svg></span><div><b>Text size</b><p>Small, Normal, Large or Extra large.</p></div></div>
+        </div>
+      </section>
+
+      <section id="backup">
+        <h2>Backup and privacy</h2>
+        <p class="intro">No account needed. Your notes stay only on your phone.</p>
+        <div class="list">
+          <div class="item"><span class="ico"><svg><use href="#i-cloud"/></svg></span><div><b>Automatic iCloud backup</b><p>Once a day a backup is saved to your own iCloud. On a new phone, “Restore from iCloud” brings your notes back.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-cloud"/></svg></span><div><b>Manual backup</b><p>Share or save the backup as text. To restore, use “Paste the backup text”.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Delete all data</b><p>Permanently deletes all notes and settings from the phone.</p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>New version notice</b><p>When the app opens with internet, it checks the App Store for a newer version. If there is one, it asks “Update” or “Later”.<span class="tag new">New</span></p></div></div>
+          <div class="item"><span class="ico"><svg><use href="#i-info"/></svg></span><div><b>Support and privacy policy</b><p>Open them from Settings → About.</p></div></div>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently asked questions</h2>
+        <div>
+          <details><summary>Does the alarm ring when my phone is on silent?</summary><p>Yes. On an iPhone with iOS 26 or later, once you allow alarms, it rings on silent, on the Lock Screen and in Focus modes. On older iOS the alarm arrives as a notification, so don’t put the phone on silent at night.</p></details>
+          <details><summary>The briefing isn’t read after the alarm. What should I do?</summary><p>Check that “Read notes aloud” is on in Settings → Read aloud &amp; briefing. The briefing starts when you tap “I’m awake” on the alarm; “Snooze” doesn’t start it.</p></details>
+          <details><summary>Do I need internet?</summary><p>No. Notes, the alarm, reminders and the briefing work offline. Weather, news headlines, commute time and the realistic voice need internet; without it they are skipped.</p></details>
+          <details><summary>Where are my notes stored?</summary><p>Only on your phone. If you turn it on, a copy is backed up to your own iCloud account. NoteWake has no servers or accounts.</p></details>
+          <details><summary>How do I skip a note for just one day?</summary><p>Long-press the repeating note and choose “Skip just this day”. It keeps showing on other days.</p></details>
+          <details><summary>Why do I need to set up Siri commands myself?</summary><p>NoteWake connects to Siri through the iPhone Shortcuts app. You set up each command once; the Siri page walks you through it.</p></details>
+        </div>
+      </section>
+
+      <p class="no-result" id="empty" hidden>No features match this search. Try another word, like “alarm” or “widget”.</p>
+    </main>
+  </div>
+
+  <footer>NoteWake · Morning notes and alarm for iPhone · Guide version 1.0</footer>
+</div>
+
+<script>
+  (function () {
+    var q = document.getElementById('q');
+    var sections = Array.prototype.slice.call(document.querySelectorAll('main section'));
+    var empty = document.getElementById('empty');
+    var norm = function (s) { return (s || '').toLocaleLowerCase('en').normalize('NFD').replace(/[̀-ͯ]/g, ''); };
+
+    function filter() {
+      var term = norm(q.value.trim());
+      var any = false;
+      sections.forEach(function (sec) {
+        var title = norm(sec.querySelector('h2').textContent);
+        var units = sec.querySelectorAll('.item, tr, .step, details, .note, .examples, .intro');
+        var hits = 0;
+        var titleHit = term && title.indexOf(term) !== -1;
+        units.forEach(function (u) {
+          if (u.tagName === 'TR' && u.parentElement.tagName === 'THEAD') return;
+          var text = norm(u.textContent + ' ' + (u.getAttribute('data-search') || ''));
+          var show = !term || titleHit || text.indexOf(term) !== -1;
+          if (u.classList.contains('examples') || u.classList.contains('intro')) return;
+          u.hidden = !show;
+          if (show) hits++;
+        });
+        // tablo: eşleşen satır yoksa tabloyu gizle
+        var ex = sec.querySelector('.examples');
+        if (ex) {
+          var rows = ex.querySelectorAll('tbody tr:not([hidden])').length;
+          ex.hidden = term && !titleHit && rows === 0;
+        }
+        sec.querySelectorAll('.list, .steps').forEach(function (box) {
+          box.hidden = !box.querySelector(':scope > :not([hidden])');
+        });
+        sec.querySelectorAll('h3').forEach(function (h) {
+          var next = h.nextElementSibling;
+          h.hidden = !!(next && next.hidden);
+        });
+        var visible = !term || titleHit || hits > 0;
+        sec.hidden = !visible;
+        if (visible) any = true;
+      });
+      empty.hidden = any;
+    }
+    q.addEventListener('input', filter);
+
+    // İçindekiler: görünen bölümü işaretle
+    var links = {};
+    document.querySelectorAll('nav.toc a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          Object.keys(links).forEach(function (k) { links[k].classList.toggle('on', k === e.target.id); });
+          var a = links[e.target.id];
+          if (a && a.parentElement.scrollWidth > a.parentElement.clientWidth) {
+            a.parentElement.scrollTo({ left: a.offsetLeft - 16, behavior: 'smooth' });
+          }
+        });
+      }, { rootMargin: '-30% 0px -60% 0px' });
+      sections.forEach(function (s) { io.observe(s); });
+    }
+  })();
+</script>
+</body>
+</html>
